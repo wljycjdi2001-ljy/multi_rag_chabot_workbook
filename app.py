@@ -69,12 +69,24 @@ for i, mt in enumerate(matches):
 print(f"✅ 조문 {len(docs)}개로 분할")
 print(f"예시: {docs[0].metadata}")
 
+# ✍️ [빈칸 채우기] 가장 단순한 RAG — 검색 → 생성
+def simple_rag(question):
+    # (1) 질문으로 관련 조문 검색 — 힌트: retriever.invoke(question)
+    docs = retriever.invoke(question)
+    context = "\n\n".join(
+        f"[{d.metadata['조']}({d.metadata['제목']})] {d.page_content}"
+        for d in docs)
+    # (2) 검색 결과 근거로 답변 — 힌트: llm.invoke(...).content
+    answer = llm.invoke(
+        f"소득세법 안내입니다. 아래 [자료]만 근거로 답하고, "
+        f"없으면 '자료에서 확인되지 않습니다'라고 하세요.\n\n"
+        f"[자료]\n{context}\n\n질문: {question}"
+    ).content
+    return answer
 
+print("🙋 소득세법의 목적은?")
+print("🤖", simple_rag("소득세법의 목적은 무엇인가요?"))
 
-
-########################## STEP 5 ###########################
-
-###### 5-1. 한계측정 ######
 print("① 잡담:")
 print("🙋 안녕하세요")
 print("🤖", simple_rag("안녕하세요"), "\n")
@@ -90,8 +102,9 @@ print("🤖", simple_rag("기본공제는 1인당 얼마인가요?"))
 
 
 
+########################## STEP 5 ###########################
 
-###### 5-2. 봇 ㅡ 1) 계산봇 ######
+###### 5-1. 계산봇 ######
 # ✍️ [빈칸 채우기] 계산봇 — 하드코딩 X, 복원 세율표 근거
 #   핵심: 3단계의 rate_table_text 를 프롬프트에 넣기
 def calc_bot(question):
@@ -113,7 +126,7 @@ print()
 print("🧮", calc_bot("과세표준 6천만원 세금 계산해줘"))
 
 
-###### 5-2. 봇 ㅡ 2) 법령봇 ######
+###### 5-2. 법령봇 ######
 # ✍️ [빈칸 채우기] 법령봇 — 4단계 simple_rag 재사용
 def law_bot(question):
     # 힌트: 이미 만든 simple_rag(question) 호출
@@ -122,7 +135,7 @@ def law_bot(question):
 print("📖", law_bot("과세기간은 어떻게 되나요?"))
 
 
-###### 5-2. 봇 ㅡ 3) 상담봇 ######
+###### 5-3. 상담봇 ######
 # ✍️ [빈칸 채우기] 상담봇 — 검색 없이 친절 응대
 def chat_bot(question):
     # 힌트: llm.invoke(프롬프트).content
@@ -133,3 +146,9 @@ def chat_bot(question):
     ).content
 
 print("💬", chat_bot("안녕하세요, 뭘 도와주나요?"))
+
+print("🤖", simple_rag("기본공제는 1인당 얼마인가요?"))
+
+
+
+############## STEP 5 종료 ##############
