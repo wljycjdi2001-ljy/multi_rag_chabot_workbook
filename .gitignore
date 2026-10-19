@@ -1,5 +1,48 @@
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment variables / secrets
 .env
-env
-.venv
-venv
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Vector stores / local data
+chroma/
+chroma_db/
+faiss_index/
+*.faiss
+*.pkl
+*.sqlite3
+uploads/
+data/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Logs
+*.log
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# PDF data
 *.pdf
