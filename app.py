@@ -1,3 +1,4 @@
+
 # 현재 노트북 커널에 설치합니다. Windows에서도 한 줄로 실행됩니다.
 %pip install -q langchain langchain-openai langchain-community langchain-text-splitters langgraph pypdf pdfplumber faiss-cpu grandalf
 print("✅ 설치 완료")
@@ -17,4 +18,5 @@ if not api_key:
 os.environ["OPENAI_API_KEY"] = api_key
 del api_key
 print("✅ 키 준비됨")
+
 
